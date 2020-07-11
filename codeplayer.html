@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="codeplayer.css">
+  <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="jquery-ui/jquery-ui.js"></script>
+  <link href="jquery-ui/jquery-ui.css" rel="stylesheet">
+  <title>JQuery</title>
+</head>
+<body>
+  
+
+  <div id="header">
+    <div id="logo">
+      CODEPLAYER
+    </div>
+    <div id="buttonContainer">
+      <div class="toggleButton active" id="html">HTML</div>
+      <div class="toggleButton" id="css">CSS</div>
+      <div class="toggleButton" id="javascript">JavaScript</div>
+      <div class="toggleButton active" id="output">Output</div>
+      
+    </div>
+  </div>
+
+  <div id="bodyContainer">
+      <textarea id="htmlPanel" class="panel"><p>Hello World</p></textarea>
+      <textarea id="cssPanel" class="panel hidden">p {color:pink;}</textarea>
+      <textarea id="javascriptPanel" class="panel hidden"></textarea>
+      <iframe id="outputPanel" class="panel"></iframe>
+      
+  </div>
+  
+
+  <script>
+     function update(){
+      $("iframe").contents().find("html").html(
+          "<html><head><style type='text/css'>"+ $("#cssPanel").val() + "</style></head><body>"
+          + $("#htmlPanel").val()+"</body></html>");
+
+          document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val()); 
+        }
+
+
+      $(".toggleButton").hover(function(){
+        $(this).addClass("highlighted");
+      },
+      function(){
+      $(this).removeClass("highlighted");
+      }
+      
+      );
+      $(".toggleButton").click(function(){
+        $(this).toggleClass("active");
+        $(this).removeClass("highlighted");
+       var panelId= $(this).attr("id")+"Panel";
+        $("#"+ panelId).toggleClass("hidden");
+        var numberOfActivePanels = 4-$('.hidden').length;
+      $(".panel").width(($(window).width()/numberOfActivePanels)-15);
+     
+      });
+
+      $(".panel").height($(window).height()-$("#header").height()-20);
+      $(".panel").width(($(window).width()/2)-15);
+      $("iframe").contents().find("html").html($("#htmlPanel").val());
+
+      $("textarea").on('change keyup paste', update);
+  </script>
+ 
+ </body>
+</html>
